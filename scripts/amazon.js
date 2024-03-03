@@ -1,9 +1,7 @@
 //this is step 1 save the data
 // this is step 2 generating html
 
-
-
-let productHTML = '';
+let productHTML = "";
 products.forEach((product) => {
   productHTML += `
   <div class="product-container">
@@ -49,13 +47,38 @@ products.forEach((product) => {
             Added
           </div>
 
-          <button class="add-to-cart-button button-primary">
+          <button class="add-to-cart-button button-primary js-add-to-cart" data-product-id="${
+            product.id
+          }">
             Add to Cart
           </button>
         </div>
   `;
 });
 
+// step 2 putting the generated html back to the page using the DOM
+document.querySelector(".js-products-grid").innerHTML = productHTML;
 
-// step 3 putting the generated html back to the page using the DOM
-document.querySelector('.js-products-grid').innerHTML = productHTML;
+// step 3 make page interactive
+document.querySelectorAll(".js-add-to-cart").forEach((addButton) => {
+  addButton.addEventListener("click", () => {
+    const productId= addButton.dataset.productId;
+    let matchingItem;
+    cart.forEach((item) => {
+      if (productId === item.productId) {
+        matchingItem = item;
+      }
+    });
+
+    if (matchingItem) {
+      matchingItem.quantity += 1;
+    } else {
+      cart.push({
+        productId: productId,
+        quantity: 1,
+      });
+    }
+
+    console.log(cart);
+  });
+});
