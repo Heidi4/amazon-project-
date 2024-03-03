@@ -1,5 +1,6 @@
 // using modules
 import {cart} from "../data/cart.js";
+import {products} from "../data/products.js";
 
 //this is step 1 save the data
 // this is step 2 generating html
