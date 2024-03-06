@@ -1,6 +1,6 @@
 // using modules
-import {cart} from "../data/cart.js";
-import {products} from "../data/products.js";
+import { cart } from "../data/cart.js";
+import { products } from "../data/products.js";
 
 //this is step 1 save the data
 // this is step 2 generating html
@@ -30,7 +30,7 @@ products.forEach((product) => {
           </div>
 
           <div class="product-quantity-container">
-            <select>
+            <select class="js-quantity-selector-${product.id}">
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -60,6 +60,27 @@ products.forEach((product) => {
   `;
 });
 
+// functions
+function addToCart(productId) {
+  const selectedValue = Number(
+    document.querySelector(`.js-quantity-selector-${productId}`).value
+  );
+  let matchingItem;
+  cart.forEach((item) => {
+    if (productId === item.productId) {
+      matchingItem = item;
+    }
+  });
+
+  if (matchingItem) {
+    matchingItem.quantity += selectedValue;
+  } else {
+    cart.push({
+      productId: productId,
+      quantity: selectedValue,
+    });
+  }
+}
 // step 2 putting the generated html back to the page using the DOM
 document.querySelector(".js-products-grid").innerHTML = productHTML;
 
@@ -67,21 +88,8 @@ document.querySelector(".js-products-grid").innerHTML = productHTML;
 document.querySelectorAll(".js-add-to-cart").forEach((addButton) => {
   addButton.addEventListener("click", () => {
     const productId = addButton.dataset.productId;
-    let matchingItem;
-    cart.forEach((item) => {
-      if (productId === item.productId) {
-        matchingItem = item;
-      }
-    });
-
-    if (matchingItem) {
-      matchingItem.quantity += 1;
-    } else {
-      cart.push({
-        productId: productId,
-        quantity: 1,
-      });
-    }
+    
+    addToCart(productId);
     let cartQuanity = 0;
     cart.forEach((item) => {
       cartQuanity += item.quantity;
